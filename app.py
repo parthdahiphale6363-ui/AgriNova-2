@@ -1,7 +1,6 @@
-from backend.app import app
+from backend import create_app
 
-# This file just imports your actual Flask app from the backend folder
-# Railway will find this and start correctly
+app = create_app()
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True, port=5000)
