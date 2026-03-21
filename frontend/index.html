@@ -1,0 +1,3439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agrinova - AI Powered Farming Assistant by Parth Dahiphale</title>
+    <meta name="description" content="Agrinova - Your AI-powered farming assistant with real-time weather, market prices, and government schemes">
+    <meta name="author" content="Parth Dahiphale">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9f2e9 100%);
+            color: #1a2a1a;
+            overflow-x: hidden;
+        }
+        
+         ::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+         ::-webkit-scrollbar-track {
+            background: #e0f0e0;
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            border-radius: 6px;
+        }
+        /* PRELOADER */
+        
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1b5e20, #2e7d32, #4caf50);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s, visibility 0.8s;
+        }
+        
+        .loader {
+            text-align: center;
+        }
+        
+        .loader-leaf {
+            font-size: 4rem;
+            color: #fff;
+            animation: leafFloat 2s ease-in-out infinite;
+        }
+        
+        .loader-text {
+            color: #fff;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 20px 0;
+            letter-spacing: 2px;
+        }
+        
+        .loader-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .loader-progress {
+            width: 0%;
+            height: 100%;
+            background: #fff;
+            animation: progress 2s ease-in-out forwards;
+        }
+        
+        @keyframes leafFloat {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg)
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg)
+            }
+        }
+        
+        @keyframes progress {
+            to {
+                width: 100%
+            }
+        }
+        /* NAVBAR */
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 50px;
+            transition: all 0.4s;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .navbar.scrolled {
+            padding: 10px 50px;
+            background: rgba(46, 125, 50, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+            color: #fff;
+            animation: rotateLogo 10s linear infinite;
+        }
+        
+        @keyframes rotateLogo {
+            from {
+                transform: rotate(0deg)
+            }
+            to {
+                transform: rotate(360deg)
+            }
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 7px 13px;
+            border-radius: 50px;
+            transition: all 0.3s;
+            font-size: 0.88rem;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-badge {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background: #ffd700;
+            border-radius: 50%;
+            margin-left: 3px;
+            vertical-align: middle;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 1
+            }
+            50% {
+                opacity: 0.2
+            }
+        }
+        /* HERO */
+        
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1b5e20, #2e7d32, #4caf50);
+            z-index: -2;
+        }
+        
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: floatS 20s infinite;
+        }
+        
+        .shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            left: -150px;
+            animation-delay: 0s
+        }
+        
+        .shape:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            right: -100px;
+            animation-delay: -5s
+        }
+        
+        .shape:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: -75px;
+            left: 30%;
+            animation-delay: -10s
+        }
+        
+        .shape:nth-child(4) {
+            width: 400px;
+            height: 400px;
+            bottom: -200px;
+            right: -200px;
+            animation-delay: -15s
+        }
+        
+        @keyframes floatS {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg)
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg)
+            }
+        }
+        
+        .floating-leaves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .leaf {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.3);
+            animation: leafFly 15s linear infinite;
+        }
+        
+        .leaf:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s
+        }
+        
+        .leaf:nth-child(2) {
+            top: 60%;
+            left: 80%;
+            animation-delay: -5s
+        }
+        
+        .leaf:nth-child(3) {
+            top: 30%;
+            left: 90%;
+            animation-delay: -10s
+        }
+        
+        .leaf:nth-child(4) {
+            top: 70%;
+            left: 20%;
+            animation-delay: -15s
+        }
+        
+        @keyframes leafFly {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1
+            }
+            to {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0
+            }
+        }
+        
+        .hero-content {
+            text-align: center;
+            color: #fff;
+            z-index: 1;
+            padding: 0 20px;
+        }
+        
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            animation: fadeInUp 1s 0.2s both;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            animation: fadeInUp 1s 0.4s both;
+        }
+        
+        .hero-ticker {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            padding: 10px 24px;
+            margin-top: 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            animation: fadeInUp 1s 0.6s both;
+            font-size: 0.88rem;
+            color: #fff;
+        }
+        
+        .ticker-dot {
+            width: 9px;
+            height: 9px;
+            background: #7fff00;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+            flex-shrink: 0;
+        }
+        
+        .ticker-scroll {
+            overflow: hidden;
+            max-width: 280px;
+        }
+        
+        .ticker-text {
+            white-space: nowrap;
+            animation: tickScroll 22s linear infinite;
+            display: inline-block;
+        }
+        
+        @keyframes tickScroll {
+            0% {
+                transform: translateX(100%)
+            }
+            100% {
+                transform: translateX(-100%)
+            }
+        }
+        
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .btn-primary {
+            background: #fff;
+            color: #2e7d32;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+        
+        .btn-outline:hover {
+            background: #fff;
+            color: #2e7d32;
+            transform: translateY(-5px);
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0)
+            }
+            50% {
+                transform: translateX(-50%) translateY(-10px)
+            }
+        }
+        /* STATS */
+        
+        .stats-section {
+            padding: 80px 50px;
+            background: #fff;
+        }
+        
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8faf8, #fff);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(46, 125, 50, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        /* FEATURES */
+        
+        .features-section {
+            padding: 80px 50px;
+            background: linear-gradient(135deg, #f5f7fa, #e8f5e8);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1a2a1a;
+            margin-bottom: 20px;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 60px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #2e7d32, #4caf50, #8bc34a);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+            transform-origin: left;
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 40px rgba(46, 125, 50, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: #2e7d32;
+            margin-bottom: 20px;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a2a1a;
+        }
+        
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .feature-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #ffd700, #ffb300);
+            color: #1a2a1a;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 50px;
+        }
+        /* CROP */
+        
+        .crop-section {
+            padding: 80px 50px;
+            background: #fff;
+        }
+        
+        .crop-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+        
+        .crop-form {
+            background: linear-gradient(135deg, #f8faf8, #fff);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a2a1a;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0f0e0;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: #fff;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .form-input:focus {
+            border-color: #2e7d32;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
+        }
+        
+        .range-input {
+            margin-top: 10px;
+        }
+        
+        .range-input input[type=range] {
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #2e7d32, #4caf50);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .range-input input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border: 2px solid #2e7d32;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .range-input input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: #2e7d32;
+        }
+        
+        .btn-location {
+            width: 100%;
+            padding: 12px;
+            background: #e8f5e8;
+            border: 2px solid #2e7d32;
+            border-radius: 15px;
+            color: #2e7d32;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .btn-location:hover {
+            background: #2e7d32;
+            color: #fff;
+        }
+        
+        .crop-results {
+            background: linear-gradient(135deg, #f8faf8, #fff);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .result-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a2a1a;
+        }
+        
+        .confidence-meter {
+            width: 150px;
+            height: 150px;
+            position: relative;
+        }
+        
+        .confidence-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#2e7d32 0deg, #e0f0e0 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 1s;
+        }
+        
+        .confidence-inner {
+            width: 80%;
+            height: 80%;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .confidence-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+        
+        .confidence-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .primary-crop {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .crop-icon {
+            font-size: 5rem;
+            margin-bottom: 10px;
+        }
+        
+        .crop-name {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .recommendations-list {
+            list-style: none;
+        }
+        
+        .recommendation-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f8faf8;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        
+        .recommendation-item:hover {
+            transform: translateX(10px);
+            background: #e8f5e8;
+        }
+        
+        .recommendation-rank {
+            width: 30px;
+            height: 30px;
+            background: #2e7d32;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        /* WEATHER */
+        
+        .weather-section {
+            padding: 80px 50px;
+            background: linear-gradient(135deg, #f5f7fa, #e3f2fd);
+        }
+        
+        .weather-current {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            border-radius: 30px;
+            padding: 40px;
+            color: #fff;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .weather-current::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            animation: rotA 20s linear infinite;
+        }
+        
+        @keyframes rotA {
+            from {
+                transform: rotate(0deg)
+            }
+            to {
+                transform: rotate(360deg)
+            }
+        }
+        
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .weather-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            color: #1a2a1a;
+            transition: all 0.3s;
+            border: 1px solid rgba(46, 125, 50, 0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .weather-card:hover {
+            transform: translateY(-5px);
+            background: #fff;
+            box-shadow: 0 15px 30px rgba(46, 125, 50, 0.15);
+        }
+        
+        .farming-advice-strip {
+            background: linear-gradient(135deg, rgba(27, 94, 32, 0.95), rgba(46, 125, 50, 0.95));
+            border-radius: 20px;
+            padding: 25px 30px;
+            color: #fff;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .advice-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+            color: #7fff00;
+        }
+        /* MARKET */
+        
+        .market-section {
+            padding: 80px 50px;
+            background: #fff;
+        }
+        
+        .market-search-bar {
+            max-width: 1400px;
+            margin: 0 auto 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .market-search-bar input {
+            flex: 1;
+            min-width: 180px;
+            padding: 11px 18px;
+            border: 2px solid #e0f0e0;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s;
+        }
+        
+        .market-search-bar input:focus {
+            border-color: #2e7d32;
+        }
+        
+        .mkt-btn {
+            padding: 11px 20px;
+            background: #f5f7fa;
+            color: #2e7d32;
+            border: 2px solid #e0f0e0;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .mkt-btn:hover,
+        .mkt-btn.active {
+            background: #2e7d32;
+            color: #fff;
+            border-color: #2e7d32;
+        }
+        
+        .market-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: linear-gradient(135deg, #f8faf8, #fff);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .market-table th {
+            background: #2e7d32;
+            color: #fff;
+            padding: 15px;
+            font-weight: 600;
+        }
+        
+        .market-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0f0e0;
+        }
+        
+        .market-table tr:hover {
+            background: #f0f8f0;
+        }
+        
+        .trend-up {
+            color: #4caf50;
+        }
+        
+        .trend-down {
+            color: #f44336;
+        }
+        /* SCHEMES */
+        
+        .schemes-section {
+            padding: 80px 50px;
+            background: linear-gradient(135deg, #f5f7fa, #fff3e0);
+        }
+        
+        .schemes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .scheme-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .scheme-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 40px rgba(46, 125, 50, 0.2);
+        }
+        
+        .scheme-header {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .scheme-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .scheme-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .scheme-body {
+            padding: 20px;
+        }
+        
+        .scheme-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .scheme-detail {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #444;
+        }
+        
+        .scheme-detail i {
+            color: #2e7d32;
+            width: 20px;
+        }
+        
+        .scheme-footer {
+            padding: 20px;
+            border-top: 1px solid #e0f0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .scheme-link {
+            background: #2e7d32;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .scheme-link:hover {
+            background: #1b5e20;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+        }
+        
+        .scheme-badge {
+            background: #ffd700;
+            color: #1a2a1a;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        /* SOIL */
+        
+        .soil-section {
+            padding: 80px 50px;
+            background: linear-gradient(135deg, #18291a, #263d28);
+        }
+        
+        .soil-section .section-title {
+            color: #fff;
+        }
+        
+        .soil-section .section-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .soil-dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        
+        .soil-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.11);
+            border-radius: 20px;
+            padding: 26px 18px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        
+        .soil-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-5px);
+        }
+        
+        .gauge-wrap {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 12px;
+        }
+        
+        .gauge-svg {
+            display: block;
+            transform: rotate(-90deg);
+        }
+        
+        .gauge-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.09);
+            stroke-width: 10;
+        }
+        
+        .gauge-fill {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.4s ease;
+        }
+        
+        .gauge-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .g-val {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            display: block;
+        }
+        
+        .g-unit {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .g-name {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 7px;
+        }
+        
+        .g-status {
+            font-size: 0.76rem;
+            padding: 3px 11px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .sg-good {
+            background: rgba(76, 175, 80, 0.18);
+            color: #7fff00;
+            border: 1px solid rgba(76, 175, 80, 0.32);
+        }
+        
+        .sg-moderate {
+            background: rgba(255, 193, 7, 0.18);
+            color: #ffd700;
+            border: 1px solid rgba(255, 193, 7, 0.32);
+        }
+        
+        .sg-poor {
+            background: rgba(244, 67, 54, 0.18);
+            color: #ff7070;
+            border: 1px solid rgba(244, 67, 54, 0.32);
+        }
+        
+        .soil-btn {
+            display: block;
+            margin: 26px auto 0;
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: #fff;
+            border: none;
+            padding: 13px 38px;
+            border-radius: 50px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.28);
+        }
+        
+        .soil-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 26px rgba(76, 175, 80, 0.42);
+        }
+        /* PEST */
+        
+        .pest-section {
+            padding: 80px 50px;
+            background: #fff;
+        }
+        
+        .pest-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 22px;
+        }
+        
+        .pest-card {
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+            transition: all 0.3s;
+            border-left: 5px solid;
+        }
+        
+        .pest-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 36px rgba(0, 0, 0, 0.14);
+        }
+        
+        .pest-card.high {
+            border-color: #f44336;
+        }
+        
+        .pest-card.medium {
+            border-color: #ff9800;
+        }
+        
+        .pest-card.low {
+            border-color: #4caf50;
+        }
+        
+        .pest-head {
+            padding: 15px 18px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+        
+        .pest-card.high .pest-head {
+            background: rgba(244, 67, 54, 0.06);
+        }
+        
+        .pest-card.medium .pest-head {
+            background: rgba(255, 152, 0, 0.06);
+        }
+        
+        .pest-card.low .pest-head {
+            background: rgba(76, 175, 80, 0.06);
+        }
+        
+        .pest-emoji {
+            font-size: 1.8rem;
+        }
+        
+        .pest-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a2a1a;
+        }
+        
+        .pest-badge {
+            margin-left: auto;
+            padding: 3px 11px;
+            border-radius: 50px;
+            font-size: 0.73rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        
+        .high .pest-badge {
+            background: #f44336;
+        }
+        
+        .medium .pest-badge {
+            background: #ff9800;
+        }
+        
+        .low .pest-badge {
+            background: #4caf50;
+        }
+        
+        .pest-body {
+            padding: 15px 18px;
+        }
+        
+        .pest-crop-tag {
+            display: inline-block;
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+        
+        .pest-desc {
+            color: #666;
+            font-size: 0.86rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .pest-tip {
+            background: #f8faf8;
+            border-radius: 10px;
+            padding: 9px 13px;
+            font-size: 0.82rem;
+            color: #444;
+        }
+        /* CALENDAR */
+        
+        .calendar-section {
+            padding: 80px 50px;
+            background: linear-gradient(135deg, #f0f7f0, #e8f5e8);
+        }
+        
+        .calendar-controls {
+            display: flex;
+            gap: 11px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+        
+        .cal-btn {
+            padding: 9px 20px;
+            border: 2px solid #2e7d32;
+            background: transparent;
+            color: #2e7d32;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.88rem;
+            transition: all 0.3s;
+        }
+        
+        .cal-btn:hover,
+        .cal-btn.active {
+            background: #2e7d32;
+            color: #fff;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 6px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .cal-month {
+            background: #fff;
+            border-radius: 11px;
+            padding: 11px 5px;
+            text-align: center;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.07);
+            min-height: 105px;
+            transition: all 0.3s;
+        }
+        
+        .cal-month:hover {
+            box-shadow: 0 7px 18px rgba(46, 125, 50, 0.13);
+            transform: translateY(-3px);
+        }
+        
+        .cal-month.cur {
+            border: 2px solid #2e7d32;
+        }
+        
+        .cal-m-name {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #666;
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        
+        .cal-bar {
+            border-radius: 6px;
+            padding: 3px 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+            text-align: center;
+        }
+        
+        .b-sow {
+            background: #c8e6c9;
+            color: #1b5e20;
+        }
+        
+        .b-grow {
+            background: #a5d6a7;
+            color: #1b5e20;
+        }
+        
+        .b-harvest {
+            background: #ffd54f;
+            color: #5d4037;
+        }
+        
+        .cal-now {
+            font-size: 0.6rem;
+            color: #2e7d32;
+            font-weight: 700;
+            margin-top: 3px;
+        }
+        
+        .cal-legend {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .leg-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.86rem;
+            color: #555;
+        }
+        
+        .leg-dot {
+            width: 13px;
+            height: 13px;
+            border-radius: 4px;
+        }
+        /* YIELD */
+        
+        .yield-section {
+            padding: 80px 50px;
+            background: #fff;
+        }
+        
+        .yield-wrap {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .yield-card {
+            background: linear-gradient(135deg, #f8faf8, #fff);
+            border-radius: 30px;
+            padding: 46px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        }
+        
+        .yield-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+        
+        .yield-result {
+            margin-top: 26px;
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            border-radius: 20px;
+            padding: 28px;
+            color: #fff;
+            text-align: center;
+            display: none;
+        }
+        
+        .yield-result h3 {
+            font-size: 1.05rem;
+            opacity: 0.85;
+            margin-bottom: 7px;
+        }
+        
+        .yield-big {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+        
+        .yield-unit {
+            font-size: 0.95rem;
+            opacity: 0.78;
+            margin-bottom: 16px;
+        }
+        
+        .yield-stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 14px;
+        }
+        
+        .yield-stat {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 13px;
+        }
+        
+        .yield-stat .v {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .yield-stat .l {
+            font-size: 0.74rem;
+            opacity: 0.76;
+            margin-top: 2px;
+        }
+        /* CHATBOT */
+        
+        .chatbot-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 380px;
+            height: 600px;
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            transform: scale(0);
+            transform-origin: bottom right;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            overflow: hidden;
+        }
+        
+        .chatbot-container.active {
+            transform: scale(1);
+        }
+        
+        .chatbot-header {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chatbot-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chatbot-header button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .chatbot-header button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message.bot {
+            align-items: flex-start;
+        }
+        
+        .message.user {
+            align-items: flex-end;
+        }
+        
+        .message-content {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message.bot .message-content {
+            background: #e8f5e8;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .message.user .message-content {
+            background: #2e7d32;
+            color: #fff;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .chatbot-input {
+            padding: 20px;
+            background: #fff;
+            border-top: 1px solid #e0f0e0;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chatbot-input input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e0f0e0;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .chatbot-input input:focus {
+            border-color: #2e7d32;
+            outline: none;
+        }
+        
+        .chatbot-input button {
+            width: 50px;
+            height: 50px;
+            background: #2e7d32;
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .chatbot-input button:hover {
+            background: #1b5e20;
+            transform: scale(1.1);
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            padding: 10px 20px;
+            background: #f5f7fa;
+            overflow-x: auto;
+        }
+        
+        .quick-action {
+            padding: 8px 15px;
+            background: #fff;
+            border: 1px solid #e0f0e0;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .quick-action:hover {
+            background: #2e7d32;
+            color: #fff;
+            border-color: #2e7d32;
+        }
+        
+        .chatbot-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
+            animation: puls 2s infinite;
+        }
+        
+        @keyframes puls {
+            0% {
+                transform: scale(1)
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 20px 40px rgba(46, 125, 50, 0.6)
+            }
+            100% {
+                transform: scale(1)
+            }
+        }
+        
+        .chatbot-toggle:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+        /* FOOTER */
+        
+        .footer {
+            background: linear-gradient(135deg, #1a2a1a, #2e7d32);
+            color: #fff;
+            padding: 60px 50px 30px;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .footer-about {
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+        
+        .footer-links h4 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: all 0.3s;
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+            padding-left: 5px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: #fff;
+            color: #2e7d32;
+            transform: translateY(-5px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .creator {
+            color: #ffd700;
+            font-weight: 600;
+        }
+        /* BACK TO TOP */
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background: #2e7d32;
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            z-index: 99;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .back-to-top.show {
+            display: flex;
+        }
+        
+        .back-to-top:hover {
+            background: #1b5e20;
+            transform: translateY(-5px);
+        }
+        /* TOAST */
+        
+        .toast-container {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 9000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        
+        .toast {
+            background: #fff;
+            border-radius: 13px;
+            padding: 13px 18px;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.11);
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            min-width: 260px;
+            max-width: 350px;
+            transform: translateX(130%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 4px solid #2e7d32;
+            pointer-events: auto;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .toast-body {
+            font-size: 0.86rem;
+            color: #1a2a1a;
+        }
+        
+        .toast-body strong {
+            display: block;
+            margin-bottom: 1px;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px)
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+        /* RESPONSIVE */
+        
+        @media (max-width:1200px) {
+            .hero-title {
+                font-size: 4rem
+            }
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr)
+            }
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr)
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(6, 1fr)
+            }
+        }
+        
+        @media (max-width:768px) {
+            .navbar {
+                padding: 15px 20px
+            }
+            .nav-links {
+                display: none
+            }
+            .hero-title {
+                font-size: 2.8rem
+            }
+            .crop-container {
+                grid-template-columns: 1fr
+            }
+            .weather-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+            .chatbot-container {
+                width: 100%;
+                height: 100%;
+                bottom: 0;
+                right: 0;
+                border-radius: 0
+            }
+            .yield-grid {
+                grid-template-columns: 1fr
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(4, 1fr)
+            }
+            .yield-stats-row {
+                grid-template-columns: 1fr
+            }
+            .stats-container {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader">
+            <div class="loader-leaf"><i class="fas fa-leaf"></i></div>
+            <div class="loader-text">Agrinova</div>
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
+            </div>
+            <div style="color:#fff;margin-top:20px;">by Parth Dahiphale</div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <i class="fas fa-leaf logo-icon"></i>
+                <span class="logo-text">Agrinova</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#crop">Crop Advisor</a></li>
+                <li><a href="#weather">Weather</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#soil">Soil Health</a></li>
+                <li><a href="#pests">Pest Alerts <span class="nav-badge"></span></a></li>
+                <li><a href="#calendar">Calendar</a></li>
+                <li><a href="#yield">Yield Calc</a></li>
+                <li><a href="#news">Agri-News</a></li>
+                <li><a href="#schemes">Schemes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section id="home" class="hero">
+        <div class="hero-background"></div>
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="floating-leaves">
+            <div class="leaf"><i class="fas fa-leaf"></i></div>
+            <div class="leaf"><i class="fas fa-leaf"></i></div>
+            <div class="leaf"><i class="fas fa-leaf"></i></div>
+            <div class="leaf"><i class="fas fa-leaf"></i></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title animate__animated animate__fadeInUp">Welcome to Agrinova</h1>
+            <p class="hero-subtitle animate__animated animate__fadeInUp animate__delay-1s">Your AI-Powered Farming Assistant</p>
+            <p class="hero-subtitle" style="font-size:1.2rem;animation-delay:1.2s;">Created by <strong>Parth Dahiphale</strong></p>
+            <div class="hero-buttons">
+                <a href="#crop" class="btn btn-primary"><i class="fas fa-robot"></i> Try AI Advisor</a>
+                <a href="#features" class="btn btn-outline"><i class="fas fa-play"></i> Explore Features</a>
+            </div>
+            <div class="hero-ticker">
+                <span class="ticker-dot"></span>
+                <span style="flex-shrink:0;font-weight:600;font-size:0.8rem;">LIVE</span>
+                <div class="ticker-scroll">
+                    <span class="ticker-text">🌾 Wheat ₹2,180/qtl &nbsp;&middot;&nbsp; 🌽 Maize ₹1,920/qtl &nbsp;&middot;&nbsp; 🍅 Tomato ₹680/qtl &nbsp;&middot;&nbsp; ☀️ Clear skies &nbsp;&middot;&nbsp; ⚠️ Aphid alert Punjab &nbsp;&middot;&nbsp; 🌱 Rabi season active</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll Down</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-item" data-aos="fade-up">
+                <div class="stat-number">50K+</div>
+                <div class="stat-label">Farmers Helped</div>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-number">22</div>
+                <div class="stat-label">Crops Supported</div>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-number">95%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">AI Support</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features-section">
+        <h2 class="section-title" data-aos="fade-up">Amazing Features</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Everything you need for smart farming</p>
+        <div class="features-grid">
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200"><span class="feature-badge">AI Powered</span>
+                <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                <h3 class="feature-title">AI Crop Advisor</h3>
+                <p class="feature-description">5 advanced AI models work together to give you the most accurate crop recommendations</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-icon"><i class="fas fa-cloud-sun-rain"></i></div>
+                <h3 class="feature-title">Live Weather</h3>
+                <p class="feature-description">Real-time weather updates with 7-day forecast for your exact location</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h3 class="feature-title">Market Prices</h3>
+                <p class="feature-description">Live mandi prices from across India with price trends and analysis</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="feature-icon"><i class="fas fa-landmark"></i></div>
+                <h3 class="feature-title">Government Schemes</h3>
+                <p class="feature-description">Direct links to apply for PM-KISAN, Fasal Bima Yojana and more</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+                <div class="feature-icon"><i class="fas fa-comment-dots"></i></div>
+                <h3 class="feature-title">AI Chatbot</h3>
+                <p class="feature-description">24/7 intelligent assistant to answer all your farming questions</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="700"><span class="feature-badge">New</span>
+                <div class="feature-icon"><i class="fas fa-vial"></i></div>
+                <h3 class="feature-title">Soil Health Monitor</h3>
+                <p class="feature-description">Visual NPK and pH ring gauges to track your soil health at a glance</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="800"><span class="feature-badge">New</span>
+                <div class="feature-icon"><i class="fas fa-bug"></i></div>
+                <h3 class="feature-title">Pest &amp; Disease Alerts</h3>
+                <p class="feature-description">Early-warning alerts for region-specific pest outbreaks with control tips</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="900"><span class="feature-badge">New</span>
+                <div class="feature-icon"><i class="fas fa-calendar-alt"></i></div>
+                <h3 class="feature-title">Farming Calendar</h3>
+                <p class="feature-description">Month-by-month sowing, growing, and harvesting schedule for major crops</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="1000"><span class="feature-badge">New</span>
+                <div class="feature-icon"><i class="fas fa-calculator"></i></div>
+                <h3 class="feature-title">Yield Calculator</h3>
+                <p class="feature-description">Estimate harvest, revenue, and input costs before you sow</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Crop Recommendation -->
+    <section id="crop" class="crop-section">
+        <h2 class="section-title" data-aos="fade-up">AI Crop Recommendation</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Enter your soil details for personalized crop suggestions</p>
+        <div class="crop-container">
+            <div class="crop-form" data-aos="fade-right">
+                <form id="cropForm">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-mountain" style="color:#2e7d32;"></i> Soil Type</label>
+                            <select class="form-input" id="soilType" style="width:100%;height:50px;">
+                                <option value="Alluvial">Alluvial (Most fertile)</option>
+                                <option value="Black">Black (Best for Cotton)</option>
+                                <option value="Red">Red (Iron rich)</option>
+                                <option value="Laterite">Laterite</option>
+                                <option value="Sandy">Sandy/Desert</option>
+                                <option value="Loamy">Loamy (Balanced)</option>
+                                <option value="Clayey">Clayey (Heavy)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-flask" style="color:#2e7d32;"></i> Soil pH</label>
+                            <input type="number" class="form-input" id="ph" value="6.5" step="0.1" required>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-tint" style="color:#2e7d32;"></i> Water Source</label>
+                            <select class="form-input" id="waterSource" style="width:100%;height:50px;">
+                                <option value="Canal">River Canal</option>
+                                <option value="TubeWell">Tube-well / Borewell</option>
+                                <option value="Rainfed">Natural Rainfall Only</option>
+                                <option value="Drip">Drip Irrigation</option>
+                                <option value="Tank">Pond / Tank</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-calendar-alt" style="color:#2e7d32;"></i> Sowing Month</label>
+                            <select class="form-input" id="sowingMonth" style="width:100%;height:50px;">
+                                <option value="June">June (Kharif)</option>
+                                <option value="November">November (Rabi)</option>
+                                <option value="February">February (Zaid)</option>
+                                <option value="March">March</option>
+                                <option value="August">August</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-edit" style="color:#2e7d32;"></i> Field Observations & Notes (Optional)</label>
+                        <textarea class="form-input" id="fieldNotes" placeholder="e.g. Soil feels dry, some weeds observed, high worm count..." style="height:100px;padding:15px;resize:none;"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-map-marker-alt" style="color:#2e7d32;"></i> Detect My Farm Location</label>
+                        <div style="display:flex;gap:10px;">
+                            <input type="text" class="form-input" id="location" placeholder="Detecting your region..." style="flex:1;">
+                            <button type="button" class="btn-location" id="getLocation" style="margin:0;width:auto;padding:0 25px;background:#e8f5e8;color:#1b5e20;border:1px solid #c8e6c9;">
+                                <i class="fas fa-crosshairs"></i> Get GPS
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width:100%;height:65px;font-size:1.2rem;margin-top:15px;background:#2e7d32;box-shadow:0 10px 20px rgba(46,125,50,0.2);">
+                        <i class="fas fa-wand-magic-sparkles"></i> Generate AI Farming Strategy
+                    </button>
+                </form>
+            </div>
+            <div class="crop-results" id="cropResults" data-aos="fade-left" style="background:transparent;padding:0;border-radius:30px;position:relative;">
+                <!-- AI Results will be injected here -->
+                <div id="recommendationContent"></div>
+            </div>
+            <div id="loading" style="display:none;text-align:center;padding:50px;">
+                <i class="fas fa-spinner fa-spin fa-3x" style="color:#2e7d32;"></i>
+                <p style="margin-top:20px;">AI is analyzing your soil data...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weather -->
+    <section id="weather" class="weather-section">
+        <h2 class="section-title" data-aos="fade-up">Live Weather & AI Advisory</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Real-time local data and precision farming insights</p>
+        <div id="weatherContainer"></div>
+        <div id="weatherAnalysis" class="farming-advice-strip" style="display:none;margin-top:30px;">
+            <i class="fas fa-brain advice-icon"></i>
+            <div id="weatherAiText" style="flex:1;"></div>
+        </div>
+    </section>
+
+    <!-- Market -->
+    <section id="market" class="market-section">
+        <h2 class="section-title" data-aos="fade-up">Live Market Prices</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Real-time mandi prices across India</p>
+        <div class="market-search-bar" data-aos="fade-up" data-aos-delay="150">
+            <input type="text" id="marketSearch" placeholder="Search commodity, market or state...">
+            <button class="mkt-btn active" onclick="filterMkt('all',this)">All</button>
+            <button class="mkt-btn" onclick="filterMkt('up',this)">&#128200; Rising</button>
+            <button class="mkt-btn" onclick="filterMkt('down',this)">&#128201; Falling</button>
+            <button class="mkt-btn" onclick="filterMkt('stable',this)">&#10145; Stable</button>
+        </div>
+        <div style="max-width:1400px;margin:0 auto;overflow-x:auto;">
+            <table class="market-table" id="marketTable">
+                <thead>
+                    <tr>
+                        <th>Commodity</th>
+                        <th>Market</th>
+                        <th>State</th>
+                        <th>Min Price (&#8377;/qtl)</th>
+                        <th>Max Price (&#8377;/qtl)</th>
+                        <th>Modal Price (&#8377;/qtl)</th>
+                        <th>Trend</th>
+                    </tr>
+                </thead>
+                <tbody id="marketBody">
+                    <tr>
+                        <td colspan="7" style="text-align:center;">Loading market prices...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="market-analysis-card" style="max-width:1400px;margin:40px auto;background:#fff;padding:40px;border-radius:30px;box-shadow:0 20px 50px rgba(0,0,0,0.06);border:1px solid #edf2ed;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:35px;">
+                <div>
+                    <h3 style="color:#2e7d32;font-size:1.8rem;margin-bottom:5px;"><i class="fas fa-chart-line"></i> AI Market Intelligence</h3>
+                    <p style="font-size:0.9rem;color:#666;">Real-time price forecasting and seasonal trends for Indian mandis</p>
+                </div>
+                <div style="display:flex;gap:15px;align-items:center;background:#f8faf8;padding:10px 20px;border-radius:15px;border:1px solid #eee;">
+                    <label style="font-size:0.9rem;font-weight:700;color:#1a2a1a;">Switch Crop View:</label>
+                    <select id="marketCropSelect" onchange="loadMarketAnalysis(this.value)" style="padding:8px 15px;border-radius:10px;border:1px solid #ddd;outline:none;background:#fff;font-family:'Poppins';cursor:pointer;">
+                        <option value="all">Overall Trend</option>
+                        <option value="Wheat">Wheat</option>
+                        <option value="Rice">Rice</option>
+                        <option value="Maize">Maize</option>
+                        <option value="Cotton">Cotton</option>
+                        <option value="Soybean">Soybean</option>
+                        <option value="Tomato">Tomato</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns: 1.6fr 1fr; gap:35px; align-items:start;">
+                <div style="background:#fff;padding:30px;border-radius:25px;border:1px solid #f0f4f0;box-shadow:inset 0 0 20px rgba(0,0,0,0.01);">
+                    <canvas id="marketChart" height="300"></canvas>
+                </div>
+                <div id="marketAiAdvice" style="background:#fff;padding:25px;border-radius:20px;border-left:5px solid #2e7d32;box-shadow:0 5px 15px rgba(0,0,0,0.02);">
+                    <div style="font-weight:700;margin-bottom:15px;color:#2e7d32;display:flex;align-items:center;gap:10px;"><i class="fas fa-robot"></i> Groq AI Grow Advisory</div>
+                    <div id="marketAiText">
+                        <div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin"></i> Analyzing...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Soil Health -->
+    <section id="soil" class="soil-section" style="padding:100px 50px;background:#fdfdfd;">
+        <h2 class="section-title" data-aos="fade-up" style="color:#1b5e20;"><i class="fas fa-flask"></i> AI Soil Health Diagnostic Lab</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100" style="color:#555;opacity:1;">Regional Geological Profiling & Synthetic Lab Report</p>
+        
+        <div style="max-width:1200px;margin:30px auto;background:#fff;padding:45px;border-radius:35px;box-shadow:0 25px 60px rgba(0,0,0,0.06);border:1px solid #edf2ed;">
+            <div id="soilDashboardContent">
+                <div style="text-align:center;padding:50px;">
+                    <div style="font-size:4rem;color:#e8f5e8;margin-bottom:20px;"><i class="fas fa-vial-circle-check"></i></div>
+                    <h3 style="color:#2e7d32;">Virtual Lab Ready</h3>
+                    <p style="color:#666;">Fill the form above and click the button below to start AI soil profiling</p>
+                </div>
+            </div>
+            <button onclick="updateSoilDashboard()" id="soilBtn" style="width:100%;height:65px;background:#2e7d32;color:#fff;border:none;border-radius:20px;font-size:1.1rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:15px;cursor:pointer;transition:0.3s;box-shadow:0 10px 20px rgba(46,125,50,0.15);overflow:hidden;">
+                <i class="fas fa-microscope" id="soilSyncIcon"></i> RUN AI SOIL DIAGNOSIS
+            </button>
+        </div>
+    </section>
+
+    <!-- Pest Alerts -->
+    <section id="pests" class="pest-section">
+        <h2 class="section-title" data-aos="fade-up">&#9888; Pest &amp; Disease Alerts</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Region-specific early warnings to protect your crops</p>
+        <div class="pest-grid" id="pestGrid"></div>
+    </section>
+
+    <!-- Crop Calendar -->
+    <section id="calendar" class="calendar-section">
+        <h2 class="section-title" data-aos="fade-up">&#128197; Crop Farming Calendar</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Month-by-month schedule — current month highlighted</p>
+        <div style="max-width:1200px;margin:0 auto;">
+            <div class="calendar-controls">
+                <button class="cal-btn active" onclick="renderCalendar('wheat',this)">&#127806; Wheat</button>
+                <button class="cal-btn" onclick="renderCalendar('rice',this)">&#127834; Rice</button>
+                <button class="cal-btn" onclick="renderCalendar('maize',this)">&#127805; Maize</button>
+                <button class="cal-btn" onclick="renderCalendar('cotton',this)">&#127807; Cotton</button>
+                <button class="cal-btn" onclick="renderCalendar('sugarcane',this)">&#127819; Sugarcane</button>
+                <button class="cal-btn" onclick="renderCalendar('soybean',this)">&#129752; Soybean</button>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+            <div class="cal-legend">
+                <div class="leg-item">
+                    <div class="leg-dot" style="background:#c8e6c9;"></div> Sowing</div>
+                <div class="leg-item">
+                    <div class="leg-dot" style="background:#a5d6a7;"></div> Growing</div>
+                <div class="leg-item">
+                    <div class="leg-dot" style="background:#ffd54f;"></div> Harvesting</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Yield Calculator -->
+    <section id="yield" class="yield-section">
+        <h2 class="section-title" data-aos="fade-up">&#129518; Yield &amp; Revenue Calculator</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Estimate your harvest, income, and input costs before planting</p>
+        <div class="yield-wrap" data-aos="fade-up" data-aos-delay="200">
+            <div class="yield-card">
+                <div class="yield-grid">
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-seedling" style="color:#2e7d32;"></i> Crop Type</label>
+                        <select class="form-input" id="yieldCrop">
+                        <option value="wheat">Wheat</option><option value="rice">Rice</option>
+                        <option value="maize">Maize</option><option value="cotton">Cotton</option>
+                        <option value="soybean">Soybean</option><option value="sugarcane">Sugarcane</option>
+                        <option value="tomato">Tomato</option><option value="potato">Potato</option>
+                    </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-ruler-combined" style="color:#2e7d32;"></i> Land Area (acres)</label>
+                        <input type="number" class="form-input" id="yieldArea" value="5" min="0.1" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-tint" style="color:#2e7d32;"></i> Irrigation Type</label>
+                        <select class="form-input" id="yieldIrr">
+                        <option value="1.0">Rainfed</option><option value="1.2">Drip Irrigation</option>
+                        <option value="1.15" selected>Canal / Flood</option><option value="1.25">Sprinkler</option>
+                    </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-seedling" style="color:#2e7d32;"></i> Soil Quality</label>
+                        <select class="form-input" id="yieldSoil">
+                        <option value="0.8">Poor</option><option value="1.0" selected>Average</option>
+                        <option value="1.2">Good</option><option value="1.35">Excellent</option>
+                    </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-rupee-sign" style="color:#2e7d32;"></i> Market Price (&#8377;/qtl)</label>
+                        <input type="number" class="form-input" id="yieldPrice" value="2000" min="100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-coins" style="color:#2e7d32;"></i> Input Cost (&#8377;/acre)</label>
+                        <input type="number" class="form-input" id="yieldCost" value="8000" min="0">
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width:100%;margin-top:14px;" onclick="calcYield()">
+                <i class="fas fa-calculator"></i> Calculate Yield &amp; Profit
+            </button>
+                <div class="yield-result" id="yieldResult">
+                    <h3>Estimated Yield</h3>
+                    <div class="yield-big" id="yQtl">0</div>
+                    <div class="yield-unit">Quintals</div>
+                    <div class="yield-stats-row">
+                        <div class="yield-stat">
+                            <div class="v" id="yRev">0</div>
+                            <div class="l">Gross Revenue</div>
+                        </div>
+                        <div class="yield-stat">
+                            <div class="v" id="yCostT">0</div>
+                            <div class="l">Input Cost</div>
+                        </div>
+                        <div class="yield-stat">
+                            <div class="v" id="yProfit">0</div>
+                            <div class="l">Net Profit</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="yieldAiBox" style="display:none;margin-top:30px;background:#e8f5e8;padding:30px;border-radius:25px;border:2px dashed #2e7d32;">
+                <h3 style="color:#2e7d32;margin-bottom:15px;"><i class="fas fa-lightbulb"></i> Groq AI Yield Boosters</h3>
+                <div id="yieldAiContent" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Alert -->
+    <section id="news" class="news-section" style="padding:100px 50px;background:linear-gradient(135deg, #121e13, #1e3320);color:#fff;position:relative;overflow:hidden;">
+        <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:50px;">
+            <div>
+                <h2 class="section-title" style="color:#fff;text-align:left;margin-bottom:10px;font-size:3rem;" data-aos="fade-right"><i class="fas fa-rss" style="color:#7fff00;"></i> Live Agri-News Alert</h2>
+                <p class="section-subtitle" style="color:rgba(255,255,255,0.6);text-align:left;margin-bottom:0;" data-aos="fade-right" data-aos-delay="100">Global trends and regional updates analyzed by Groq AI</p>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:15px;">
+                <div id="newsTimer" style="font-size:0.75rem;color:rgba(255,255,255,0.4);letter-spacing:1px;font-weight:600;"><i class="fas fa-history"></i> LAST SYNC: JUST NOW</div>
+                <button onclick="refreshNews(this)" class="btn" style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);padding:10px 25px;font-size:0.9rem;backdrop-filter:blur(5px);transition:all 0.4s;box-shadow:0 10px 20px rgba(0,0,0,0.2);">
+                    <i class="fas fa-sync-alt" id="newsRefreshIcon"></i> AI Refresh
+                </button>
+            </div>
+        </div>
+        <div id="newsGrid" style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:30px;">
+            <div style="text-align:center;padding:100px;grid-column:1/-1;">
+                <i class="fas fa-robot fa-spin fa-3x" style="color:#7fff00;margin-bottom:20px;"></i>
+                <p style="font-size:1.2rem;letter-spacing:1px;opacity:0.7;">GPT-4o & LLAMA-3 SYNCING...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schemes -->
+    <section id="schemes" class="schemes-section">
+        <h2 class="section-title" data-aos="fade-up">Government Schemes</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">Apply directly to schemes you're eligible for</p>
+        <div class="schemes-grid" id="schemesGrid"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <div class="footer-logo"><i class="fas fa-leaf"></i> Agrinova</div>
+                <p class="footer-about">AI-powered farming assistant helping farmers make better decisions with real-time data and intelligent recommendations.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#crop">Crop Advisor</a></li>
+                    <li><a href="#weather">Weather</a></li>
+                    <li><a href="#market">Market Prices</a></li>
+                    <li><a href="#soil">Soil Health</a></li>
+                    <li><a href="#pests">Pest Alerts</a></li>
+                    <li><a href="#schemes">Schemes</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Farming Guide</a></li>
+                    <li><a href="#">Success Stories</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Connect With Us</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a><a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Agrinova. Created with <i class="fas fa-heart" style="color:#ff4d4d;"></i> by <span class="creator">Parth Dahiphale</span></p>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header">
+            <h3><i class="fas fa-robot"></i> AgriAI Assistant</h3>
+            <button id="minimizeChatbot"><i class="fas fa-minus"></i></button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="message bot">
+                <div class="message-content">&#128075; Namaste! I'm your Agrinova AI assistant. How can I help you today?</div>
+            </div>
+        </div>
+        <div class="quick-actions">
+            <button class="quick-action" onclick="sendQuickMsg('What crops should I plant?')">&#127793; Crop advice</button>
+            <button class="quick-action" onclick="sendQuickMsg('Show me government schemes')">&#127963; Schemes</button>
+            <button class="quick-action" onclick="sendQuickMsg('Weather forecast')">&#127780; Weather</button>
+            <button class="quick-action" onclick="sendQuickMsg('Market prices for wheat')">&#128176; Wheat prices</button>
+            <button class="quick-action" onclick="sendQuickMsg('How to control aphids?')">&#128027; Pest control</button>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbotInput" placeholder="Type your message...">
+            <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+    <button class="chatbot-toggle" id="chatbotToggle"><i class="fas fa-comment-dots"></i></button>
+    <button class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Preloader
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var p = document.getElementById('preloader');
+                p.style.opacity = '0';
+                p.style.visibility = 'hidden';
+            }, 2000);
+        });
+
+        // Navbar + back-to-top scroll
+        window.addEventListener('scroll', function() {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 100);
+            document.getElementById('backToTop').classList.toggle('show', window.scrollY > 500);
+        });
+        document.getElementById('backToTop').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Range sliders logic removed as NPK is now AI predicted
+
+        // Get location
+        document.getElementById('getLocation').addEventListener('click', function() {
+            var btn = this;
+            if (!navigator.geolocation) {
+                alert('Geolocation not supported');
+                return;
+            }
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing Region...';
+            btn.disabled = true;
+            navigator.geolocation.getCurrentPosition(
+                async function(pos) {
+                    var lat = pos.coords.latitude,
+                        lon = pos.coords.longitude;
+                    try {
+                        const res = await fetch(`/api/ai-location?lat=${lat}&lon=${lon}`);
+                        const data = await res.json();
+                        document.getElementById('location').value = data.address || data.clean_address;
+                        showToast('📍', 'Region Identified', `Zone: ${data.zone || data.region_type} | Soil: ${data.soil || data.primary_soil}`);
+                        loadWeather(lat, lon);
+                    } catch(e) {
+                        loadWeather(lat, lon);
+                    }
+                    btn.innerHTML = '<i class="fas fa-crosshairs"></i> Use My Location';
+                    btn.disabled = false;
+                },
+                function(e) {
+                    alert('Error: ' + e.message);
+                    btn.innerHTML = '<i class="fas fa-crosshairs"></i> Use My Location';
+                    btn.disabled = false;
+                }
+            );
+        });
+
+        // Crop form submit
+        document.getElementById('cropForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('cropResults').style.display = 'none';
+            
+            try {
+                var data = {
+                    soil_type: document.getElementById('soilType').value,
+                    ph: parseFloat(document.getElementById('ph').value),
+                    water_source: document.getElementById('waterSource').value,
+                    sowing_month: document.getElementById('sowingMonth').value,
+                    field_notes: document.getElementById('fieldNotes') ? document.getElementById('fieldNotes').value : '',
+                    location: document.getElementById('location').value || 'India',
+                    // Automatic weather data from UI
+                    temperature: window.currentWeatherTemp || 25,
+                    humidity: window.currentWeatherHum || 60,
+                    rainfall: window.currentWeatherRain || 100
+                };
+
+                var res = await fetch('/api/recommend-crop', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                var result = await res.json();
+                if(result.success) {
+                    displayRec(result.data);
+                    showToast('✅', 'Farming Plan Ready', 'AI Decision Support Dashboard has been generated.');
+                } else {
+                    throw new Error(result.error || 'AI Analysis failed');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error processing recommendation: ' + err.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('cropResults').style.display = 'block';
+            }
+        });
+
+        let lastRecData = null;
+        function displayRec(data) {
+            lastRecData = data;
+            const primary = data.primary_recommendation || {};
+            const scores = data.suitability_scores || {};
+            const analysis = data.detailed_analysis || {};
+            
+            const parseConf = (str) => parseFloat((str || '90').replace('%', ''));
+            const conf = parseConf(primary.confidence);
+            const deg = (conf / 100) * 360;
+            
+            const typeColor = primary.recommendation_type === 'Best' ? '#2e7d32' : '#ef6c00';
+            const typeBg = primary.recommendation_type === 'Best' ? '#e8f5e8' : '#fff3e0';
+
+            let html = `
+                <div style="background:#fff;padding:35px;border-radius:30px;box-shadow:0 15px 40px rgba(0,0,0,0.05);border:1px solid #edf2ed;">
+                    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:30px;">
+                        <div>
+                            <div style="display:flex;align-items:center;gap:15px;margin-bottom:15px;">
+                                <div style="width:55px;height:55px;border-radius:50%;background:conic-gradient(${typeColor} ${deg}deg, #f0f0f0 ${deg}deg);display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:800;color:${typeColor};border:4px solid #fff;box-shadow:0 0 10px rgba(0,0,0,0.05);">${conf}%</div>
+                                <span style="background:${typeBg};color:${typeColor};padding:6px 15px;border-radius:50px;font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;">
+                                    <i class="fas fa-certificate"></i> ${primary.recommendation_type} MATCH
+                                </span>
+                            </div>
+                            <h2 style="font-size:3rem;margin:5px 0;color:#1b5e20;display:flex;align-items:center;gap:15px;">
+                                ${primary.icon || '🌱'} ${primary.crop}
+                            </h2>
+                            <p style="color:#666;font-size:1rem;margin-top:5px;">${primary.reason_summary}</p>
+                        </div>
+                        <button onclick="simplifyAdvice()" class="btn" style="background:#fff;color:#2e7d32;border:2px solid #2e7d32;padding:10px 20px;font-weight:700;border-radius:15px;transition:0.3s;box-shadow:0 5px 15px rgba(46,125,50,0.1);">
+                            🗣️ Explain Simply
+                        </button>
+                    </div>
+
+                    ${(primary.issues_detected && primary.issues_detected.length > 0) ? `
+                        <div style="background:#fff5f5;border-left:5px solid #c62828;padding:15px 20px;border-radius:10px;margin-bottom:30px;">
+                            <h4 style="color:#c62828;font-size:0.9rem;margin-bottom:5px;"><i class="fas fa-exclamation-circle"></i> Mismatches Detected:</h4>
+                            <ul style="margin:0;padding-left:20px;color:#b71c1c;font-size:0.85rem;">
+                                ${primary.issues_detected.map(issue => `<li>${issue}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    <!-- DECISION METRICS -->
+                    <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:20px;margin-bottom:40px;">
+                        <div style="background:#f8faf8;padding:20px;border-radius:20px;text-align:center;">
+                            <div style="font-size:1.8rem;margin-bottom:5px;">🌾</div>
+                            <div style="font-weight:700;color:#2e7d32;font-size:1.1rem;">${primary.yield_estimate}</div>
+                            <div style="font-size:0.7rem;color:#666;text-transform:uppercase;">Expected Yield</div>
+                        </div>
+                        <div style="background:#f1f8e9;padding:20px;border-radius:20px;text-align:center;">
+                            <div style="font-size:1.8rem;margin-bottom:5px;">💰</div>
+                            <div style="font-weight:700;color:#2e7d32;font-size:1.1rem;">${primary.profit_estimate}</div>
+                            <div style="font-size:0.7rem;color:#666;text-transform:uppercase;">Est. Profit</div>
+                        </div>
+                        <div style="background:#e8f5e8;padding:20px;border-radius:20px;text-align:center;">
+                            <div style="font-size:1.8rem;margin-bottom:5px;">⏳</div>
+                            <div style="font-weight:700;color:#2e7d32;font-size:1.1rem;">${primary.duration}</div>
+                            <div style="font-size:0.7rem;color:#666;text-transform:uppercase;">Cycle Duration</div>
+                        </div>
+                        <div style="background:${primary.risk_level==='Low'?'#e8f5e8':'#fff3e0'};padding:20px;border-radius:20px;text-align:center;">
+                            <div style="font-size:1.8rem;margin-bottom:5px;">⚠️</div>
+                            <div style="font-weight:700;color:${primary.risk_level==='Low'?'#2e7d32':'#ef6c00'};font-size:1.1rem;">${primary.risk_level}</div>
+                            <div style="font-size:0.7rem;color:#666;text-transform:uppercase;">Risk Level</div>
+                        </div>
+                    </div>
+
+                    <!-- MATCH ANALYSIS -->
+                    <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:40px;align-items:start;">
+                        <div>
+                            <h3 style="margin-bottom:20px;font-size:1.2rem;color:#1a2a1a;">Suitability Analysis</h3>
+                            <div style="margin-bottom:20px;">
+                                <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:8px;font-weight:600;"><span>Soil Compatibility</span><span>${scores.soil_match}</span></div>
+                                <div style="height:8px;background:#eee;border-radius:10px;overflow:hidden;"><div style="width:${scores.soil_match};background:#4caf50;height:100%;"></div></div>
+                            </div>
+                            <div style="margin-bottom:20px;">
+                                <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:8px;font-weight:600;"><span>Climate Match</span><span>${scores.climate_match}</span></div>
+                                <div style="height:8px;background:#eee;border-radius:10px;overflow:hidden;"><div style="width:${scores.climate_match};background:#2e7d32;height:100%;"></div></div>
+                            </div>
+                            <div style="margin-bottom:20px;">
+                                <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:8px;font-weight:600;"><span>Water Availability</span><span>${scores.water_match}</span></div>
+                                <div style="height:8px;background:#eee;border-radius:10px;overflow:hidden;"><div style="width:${scores.water_match};background:#2196f3;height:100%;"></div></div>
+                            </div>
+                        </div>
+                        <div style="background:#fdfdfd;padding:25px;border-radius:20px;border:1px solid #f0f0f0;">
+                            <h3 style="margin-bottom:15px;font-size:1.1rem;color:#1b5e20;"><i class="fas fa-lightbulb"></i> Why this Recommendation?</h3>
+                            <ul style="list-style:none;padding:0;">
+                                ${(analysis.why_this_crop || []).map(r => `<li style="font-size:0.9rem;margin-bottom:10px;color:#555;display:flex;gap:10px;"><i class="fas fa-check" style="color:#2e7d32;margin-top:4px;"></i> ${r}</li>`).join('')}
+                            </ul>
+                            ${(analysis.limitations && analysis.limitations.length > 0) ? `
+                                <div style="margin-top:20px;padding-top:20px;border-top:1px solid #eee;">
+                                    <h4 style="font-size:0.9rem;color:#c62828;margin-bottom:10px;">Known Limitations:</h4>
+                                    <ul style="list-style:none;padding:0;">
+                                        ${analysis.limitations.map(l => `<li style="font-size:0.85rem;color:#777;margin-bottom:5px;display:flex;gap:8px;"><i class="fas fa-minus-circle" style="color:#c62828;margin-top:3px;"></i> ${l}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <!-- PLANS -->
+                    <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:20px;margin:40px 0;">
+                        <div style="border:1px solid #f0f0f0;padding:20px;border-radius:20px;">
+                            <h4 style="font-size:0.9rem;color:#2e7d32;margin-bottom:10px;"><i class="fas fa-tasks"></i> Action Plan</h4>
+                            <ul style="padding-left:15px;font-size:0.85rem;color:#666;line-height:1.6;">
+                                ${(analysis.action_plan || []).map(p => `<li>${p}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div style="border:1px solid #f0f0f0;padding:20px;border-radius:20px;">
+                            <h4 style="font-size:0.9rem;color:#1565c0;margin-bottom:10px;"><i class="fas fa-flask"></i> Fertilizer Strategy</h4>
+                            <div style="font-size:0.85rem;color:#666;line-height:1.6;">${analysis.fertilizer_plan || 'Custom N-P-K management recommended'}</div>
+                        </div>
+                        <div style="border:1px solid #f0f0f0;padding:20px;border-radius:20px;">
+                            <h4 style="font-size:0.9rem;color:#0d47a1;margin-bottom:10px;"><i class="fas fa-droplet"></i> Irrigation Plan</h4>
+                            <div style="font-size:0.85rem;color:#666;line-height:1.6;">${analysis.irrigation_plan || 'Moisture control suggested'}</div>
+                        </div>
+                    </div>
+
+                    <!-- ALTERNATIVES TABLE -->
+                    <div style="margin-top:40px;">
+                        <h3 style="margin-bottom:20px;font-size:1.2rem;color:#1a2a1a;"><i class="fas fa-exchange-alt"></i> Better Suited Alternatives</h3>
+                        <div style="overflow-x:auto;">
+                            <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+                                <thead>
+                                    <tr style="background:#f8faf8;border-bottom:2px solid #e8f5e8;">
+                                        <th style="padding:15px;text-align:left;">Alternative Crop</th>
+                                        <th style="padding:15px;text-align:left;">Why it fits better?</th>
+                                        <th style="padding:15px;text-align:center;">Profit Est.</th>
+                                        <th style="padding:15px;text-align:center;">Risk</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${(data.alternative_crops || []).map(a => `
+                                        <tr style="border-bottom:1px solid #eee;">
+                                            <td style="padding:15px;font-weight:700;color:#2e7d32;">${a.crop}</td>
+                                            <td style="padding:15px;color:#666;font-size:0.8rem;">${a.reason}</td>
+                                            <td style="padding:15px;text-align:center;">${a.expected_profit}</td>
+                                            <td style="padding:15px;text-align:center;"><span style="padding:4px 10px;border-radius:20px;background:#fef3f2;color:#b42318;font-size:0.75rem;">${a.risk_level}</span></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    ${(data.alerts && data.alerts.length > 0) ? `
+                        <div style="margin-top:40px;background:#fff4e5;padding:25px;border-radius:20px;border:1px solid #ffe0b2;">
+                            <h3 style="margin-bottom:12px;font-size:1.10rem;color:#e65100;"><i class="fas fa-bell"></i> Critical Alerts</h3>
+                            <ul style="margin:0;padding-left:20px;color:#bf360c;font-size:0.95rem;">
+                                ${data.alerts.map(alert => `<li>${alert}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                    
+                    <div id="simpleModeText" style="margin-top:30px;display:none;background:#e1f5fe;padding:25px;border-radius:25px;border:1px solid #81d4fa;animation: fadeIn 0.5s;">
+                        <h4 style="color:#0277bd;margin-bottom:10px;"><i class="fas fa-comment-dots"></i> Simple Explanation for Farmers</h4>
+                        <p id="simpleExplanation" style="color:#01579b;font-size:1.05rem;line-height:1.6;"></p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('recommendationContent').innerHTML = html;
+        }
+
+        async function simplifyAdvice() {
+            if(!lastRecData) return;
+            const container = document.getElementById('simpleModeText');
+            const text = document.getElementById('simpleExplanation');
+            container.style.display = 'block';
+            text.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AI is simplifying advice...';
+            
+            try {
+                const res = await fetch('/api/simplify-recommendation', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(lastRecData)
+                });
+                const data = await res.json();
+                text.innerText = data.simple_explanation;
+                container.scrollIntoView({behavior: 'smooth'});
+            } catch(e) {
+                text.innerText = "Check back later for simple explanation.";
+            }
+        }
+
+        // Weather
+        async function loadWeather(lat, lon) {
+            lat = lat || 28.6139;
+            lon = lon || 77.2090;
+            try {
+                var res = await fetch('/api/weather?lat=' + lat + '&lon=' + lon);
+                var data = await res.json();
+                
+                // Store globally for crop recommendation
+                window.currentWeatherTemp = data.current.temperature;
+                window.currentWeatherHum = data.current.humidity;
+                window.currentWeatherRain = data.current.rainfall || 100;
+
+                var html = '<div class="weather-current" data-aos="fade-up">' +
+                    '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;">' +
+                    '<div style="display:flex;align-items:center;gap:30px;"><div style="font-size:5rem;">' + data.current.icon + '</div>' +
+                    '<div><div style="font-size:4rem;font-weight:700;">' + data.current.temperature + '&deg;C</div>' +
+                    '<div style="font-size:1.5rem;opacity:0.9;">' + data.current.condition + '</div>' +
+                    '<div style="margin-top:5px;">📍 ' + data.current.location + '</div></div></div>' +
+                    '<div style="display:flex;gap:30px;">' +
+                    '<div style="text-align:center;"><i class="fas fa-tint" style="font-size:2rem;"></i><div style="font-size:1.2rem;">' + data.current.humidity + '%</div><div style="opacity:0.8;">Humidity</div></div>' +
+                    '<div style="text-align:center;"><i class="fas fa-wind" style="font-size:2rem;"></i><div style="font-size:1.2rem;">' + data.current.wind_speed + ' km/h</div><div style="opacity:0.8;">Wind Speed</div></div>' +
+                    '</div></div></div><div class="weather-grid">';
+                data.forecast.forEach(function(day) {
+                    html += '<div class="weather-card"><div style="font-weight:600;margin-bottom:10px;">' + day.day + '</div><div style="font-size:2rem;margin:10px 0;">' + day.icon + '</div><div style="font-size:1.2rem;font-weight:600;">' + day.max_temp + '&deg; / ' + day.min_temp + '&deg;</div><div style="font-size:0.9rem;opacity:0.8;margin-top:5px;">' + day.condition + '</div></div>';
+                });
+                html += '</div>';
+                var adv = farmingAdvice(data.current);
+                html += '<div class="farming-advice-strip"><span class="advice-icon">' + adv.icon + '</span><div><strong style="display:block;margin-bottom:4px;">' + adv.title + '</strong><span style="font-size:0.9rem;opacity:0.9;">' + adv.text + '</span></div></div>';
+                document.getElementById('weatherContainer').innerHTML = html;
+            } catch (err) {
+                document.getElementById('weatherContainer').innerHTML = '<p style="text-align:center;color:#666;padding:40px;">Unable to load weather data</p>';
+            }
+        }
+
+        function farmingAdvice(c) {
+            var t = c.temperature || 25,
+                h = c.humidity || 60;
+            if (t > 40) return {
+                icon: '🔥',
+                title: 'High Heat Alert',
+                text: 'Avoid mid-day field work. Ensure adequate irrigation and shade netting for sensitive crops.'
+            };
+            if (h > 85) return {
+                icon: '🌫️',
+                title: 'High Humidity Warning',
+                text: 'Increased fungal disease risk. Monitor crops and consider preventive fungicide spray.'
+            };
+            if (t < 10) return {
+                icon: '❄️',
+                title: 'Cold Wave Advisory',
+                text: 'Protect seedlings with mulching. Delay sowing of warm-season crops.'
+            };
+            return {
+                icon: '✅',
+                title: 'Good Farming Conditions',
+                text: 'Weather is suitable for field operations. Ideal for fertilizer application and light irrigation.'
+            };
+        }
+
+        // Market
+        var allPrices = [],
+            activeFilter = 'all';
+
+        async function loadMarketPrices() {
+            try {
+                var res = await fetch('/api/mandi-prices');
+                var prices = await res.json();
+                if (!prices || prices.length === 0) {
+                    document.getElementById('marketBody').innerHTML = '<tr><td colspan="7" style="text-align:center;">No market data available</td></tr>';
+                    return;
+                }
+                allPrices = prices;
+                renderMarket(prices);
+            } catch (err) {
+                document.getElementById('marketBody').innerHTML = '<tr><td colspan="7" style="text-align:center;">Unable to load market prices</td></tr>';
+            }
+        }
+
+        function renderMarket(prices) {
+            var html = '';
+            prices.forEach(function(p) {
+                var ti = p.trend === 'up' ? '📈' : p.trend === 'down' ? '📉' : '➡️';
+                var tc = p.trend === 'up' ? '#4caf50' : p.trend === 'down' ? '#f44336' : '#666';
+                html += '<tr data-trend="' + p.trend + '" data-commodity="' + (p.commodity || '').toLowerCase() + '" data-market="' + (p.market || '').toLowerCase() + '" data-state="' + (p.state || '').toLowerCase() + '">' +
+                    '<td><strong>' + p.commodity + '</strong></td><td>' + p.market + '</td><td>' + p.state + '</td>' +
+                    '<td>₹' + p.min.toLocaleString() + '</td><td>₹' + p.max.toLocaleString() + '</td>' +
+                    '<td style="font-weight:600;color:#2e7d32;">₹' + p.modal.toLocaleString() + '</td>' +
+                    '<td style="color:' + tc + ';">' + ti + ' ' + (p.trend !== 'stable' ? p.change_percent + '%' : '') + '</td></tr>';
+            });
+            document.getElementById('marketBody').innerHTML = html;
+        }
+
+        function filterMkt(f, btn) {
+            activeFilter = f;
+            document.querySelectorAll('.mkt-btn').forEach(function(b) {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            applyMktFilter();
+        }
+
+        function applyMktFilter() {
+            var q = (document.getElementById('marketSearch').value || '').toLowerCase();
+            document.querySelectorAll('#marketBody tr[data-trend]').forEach(function(row) {
+                var tm = activeFilter === 'all' || row.dataset.trend === activeFilter;
+                var sm = !q || row.dataset.commodity.includes(q) || row.dataset.market.includes(q) || row.dataset.state.includes(q);
+                row.style.display = (tm && sm) ? '' : 'none';
+            });
+        }
+
+        document.getElementById('marketSearch').addEventListener('input', applyMktFilter);
+
+        // Schemes
+        async function loadSchemes() {
+            try {
+                var res = await fetch('/api/schemes');
+                var schemes = await res.json();
+                var html = '';
+                schemes.forEach(function(s) {
+                    var icon = (s.icon && !s.icon.includes('http')) ? s.icon : '🏛️';
+                    html += `<div class="scheme-card" data-aos="fade-up">
+                        <div class="scheme-header">
+                            <div class="scheme-icon">${icon}</div>
+                            <div class="scheme-title">${s.name || 'Government Scheme'}</div>
+                            ${s.feature ? `<span class="scheme-badge" style="background:#2e7d32;color:#fff;border:1px solid rgba(255,255,255,0.3);">${s.feature}</span>` : ''}
+                        </div>
+                        <div class="scheme-body">
+                            <p class="scheme-description">${s.description || 'Loading detailed benefits from official portals...'}</p>
+                            <div class="scheme-detail"><i class="fas fa-receipt"></i><span><strong>Benefits:</strong> ${s.benefit || 'Variable by state'}</span></div>
+                            <div class="scheme-detail"><i class="fas fa-user-check"></i><span><strong>Who can apply:</strong> ${s.eligibility || 'Check website'}</span></div>
+                            <div class="scheme-detail"><i class="fas fa-hourglass-half"></i><span style="color:#d32f2f;"><strong>Status:</strong> ${s.deadline || 'Ongoing'}</span></div>
+                        </div>
+                        <div class="scheme-footer">
+                            <a href="${s.apply_link || '#'}" target="_blank" class="scheme-link" style="width:100%;text-align:center;"><i class="fas fa-external-link-alt"></i> Apply Directly</a>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('schemesGrid').innerHTML = html || '<p style="text-align:center;padding:50px;">Fetching schemes...</p>';
+            } catch (err) {
+                document.getElementById('schemesGrid').innerHTML = '<p style="text-align:center;padding:50px;color:#666;">Unable to sync with scheme database.</p>';
+            }
+        }
+
+        // Chatbot
+        document.getElementById('chatbotToggle').addEventListener('click', function() {
+            document.getElementById('chatbotContainer').classList.toggle('active');
+            if (document.getElementById('chatbotContainer').classList.contains('active')) this.style.display = 'none';
+        });
+        document.getElementById('minimizeChatbot').addEventListener('click', function() {
+            document.getElementById('chatbotContainer').classList.remove('active');
+            document.getElementById('chatbotToggle').style.display = 'flex';
+        });
+
+        async function sendMsgToBot() {
+            var inp = document.getElementById('chatbotInput');
+            var msg = inp.value.trim();
+            if (!msg) return;
+            addMsg(msg, 'user');
+            inp.value = '';
+            var tid = showTyp();
+            try {
+                var res = await fetch('/api/chatbot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: msg
+                    })
+                });
+                var data = await res.json();
+                removeTyp(tid);
+                setTimeout(function() {
+                    addMsg(data.response, 'bot');
+                }, 500);
+            } catch (e) {
+                removeTyp(tid);
+                addMsg('Sorry, I encountered an error. Please try again.', 'bot');
+            }
+        }
+
+        function addMsg(text, sender) {
+            var msgs = document.getElementById('chatbotMessages');
+            var div = document.createElement('div');
+            div.className = 'message ' + sender;
+            div.innerHTML = '<div class="message-content">' + text + '<div style="font-size:0.7rem;opacity:0.7;margin-top:5px;">' + new Date().toLocaleTimeString() + '</div></div>';
+            msgs.appendChild(div);
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        function showTyp() {
+            var id = 'typ' + Date.now(),
+                msgs = document.getElementById('chatbotMessages');
+            var div = document.createElement('div');
+            div.className = 'message bot';
+            div.id = id;
+            div.innerHTML = '<div class="message-content"><i class="fas fa-ellipsis-h fa-pulse"></i> Thinking...</div>';
+            msgs.appendChild(div);
+            msgs.scrollTop = msgs.scrollHeight;
+            return id;
+        }
+
+        function removeTyp(id) {
+            var el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function sendQuickMsg(msg) {
+            document.getElementById('chatbotInput').value = msg;
+            sendMsgToBot();
+        }
+        document.getElementById('sendMessage').addEventListener('click', sendMsgToBot);
+        document.getElementById('chatbotInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMsgToBot();
+        });
+
+        // Toast
+        function showToast(icon, title, msg, dur) {
+            dur = dur || 4000;
+            var c = document.getElementById('toastContainer');
+            var t = document.createElement('div');
+            t.className = 'toast';
+            t.innerHTML = '<span class="toast-icon">' + icon + '</span><div class="toast-body"><strong>' + title + '</strong>' + msg + '</div>';
+            c.appendChild(t);
+            setTimeout(function() {
+                t.classList.add('show');
+            }, 50);
+            setTimeout(function() {
+                t.classList.remove('show');
+                setTimeout(function() {
+                    t.remove();
+                }, 450);
+            }, dur);
+        }
+
+        async function updateSoilDashboard() {
+            const btn = document.getElementById('soilBtn');
+            const icon = document.getElementById('soilSyncIcon');
+            const content = document.getElementById('soilDashboardContent');
+            
+            if(!icon) return; // Guard for pre-init calls
+            
+            icon.className = "fas fa-spinner fa-spin";
+            btn.style.opacity = "0.7";
+            btn.disabled = true;
+
+            const data = {
+                soil_type: document.getElementById('soilType').value,
+                ph: parseFloat(document.getElementById('ph').value),
+                location: document.getElementById('location').value || 'India',
+                field_notes: document.getElementById('fieldNotes') ? document.getElementById('fieldNotes').value : '',
+                temperature: window.currentWeatherTemp || 25,
+                rainfall: window.currentWeatherRain || 100
+            };
+
+            try {
+                const res = await fetch('/api/soil-diagnosis', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                const response = await res.json();
+                const d = response.data;
+
+                let html = `
+                    <div style="display:grid;grid-template-columns: 1fr 1fr;gap:40px;margin-bottom:40px;">
+                        <div>
+                            <div style="display:flex;align-items:center;gap:20px;margin-bottom:25px;">
+                                <div style="width:70px;height:70px;background:#e8f5e8;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#2e7d32;font-weight:800;border:2px solid #c8e6c9;">
+                                    ${d.health_score}
+                                </div>
+                                <div>
+                                    <h3 style="margin:0;color:#1b5e20;">AI Health Score</h3>
+                                    <p style="margin:0;color:#666;font-size:0.85rem;">Estimated for ${data.location}</p>
+                                </div>
+                            </div>
+                            
+                            <h4 style="color:#2e7d32;margin-bottom:15px;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;">Inferred Nutrient Status</h4>
+                            <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:15px;margin-bottom:30px;">
+                                <div style="background:#f8faf8;padding:15px;border-radius:15px;text-align:center;border:1px solid #eee;">
+                                    <div style="font-weight:700;color:#1b5e20;">Nitrogen</div>
+                                    <div style="font-size:0.75rem;color:${d.nutrient_status.nitrogen==='Low'?'#c62828':'#2e7d32'};font-weight:600;">${d.nutrient_status.nitrogen}</div>
+                                </div>
+                                <div style="background:#f8faf8;padding:15px;border-radius:15px;text-align:center;border:1px solid #eee;">
+                                    <div style="font-weight:700;color:#1b5e20;">Phosphorus</div>
+                                    <div style="font-size:0.75rem;color:${d.nutrient_status.phosphorus==='Low'?'#c62828':'#2e7d32'};font-weight:600;">${d.nutrient_status.phosphorus}</div>
+                                </div>
+                                <div style="background:#f8faf8;padding:15px;border-radius:15px;text-align:center;border:1px solid #eee;">
+                                    <div style="font-weight:700;color:#1b5e20;">Potassium</div>
+                                    <div style="font-size:0.75rem;color:${d.nutrient_status.potassium==='Low'?'#c62828':'#2e7d32'};font-weight:600;">${d.nutrient_status.potassium}</div>
+                                </div>
+                            </div>
+
+                            <h4 style="color:#2e7d32;margin-bottom:15px;font-size:0.9rem;text-transform:uppercase;">Physical Composition</h4>
+                            <div style="height:25px;background:#eee;border-radius:30px;overflow:hidden;display:flex;margin-bottom:10px;">
+                                <div style="width:${d.composition.sand};background:#ffe082;text-align:center;font-size:0.65rem;line-height:25px;font-weight:800;color:#856404;">SAND ${d.composition.sand}</div>
+                                <div style="width:${d.composition.silt};background:#bcaaa4;text-align:center;font-size:0.65rem;line-height:25px;font-weight:800;color:#4e342e;">SILT ${d.composition.silt}</div>
+                                <div style="width:${d.composition.clay};background:#8d6e63;text-align:center;font-size:0.65rem;line-height:25px;font-weight:800;color:#fff;">CLAY ${d.composition.clay}</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background:linear-gradient(135deg, #f1f8e9, #fff);padding:30px;border-radius:25px;border:1px solid #c8e6c9;">
+                            <h3 style="color:#2e7d32;margin-bottom:20px;font-size:1.1rem;"><i class="fas fa-hand-holding-heart"></i> AI Treatment Plan</h3>
+                            <ul style="list-style:none;padding:0;">
+                                ${d.treatment_plan.map(p => `<li style="margin-bottom:12px;display:flex;gap:12px;font-size:0.9rem;color:#33691e;line-height:1.4;">
+                                    <i class="fas fa-check-circle" style="margin-top:3px;font-size:0.9rem;color:#4caf50;"></i>
+                                    <span>${p}</span>
+                                </li>`).join('')}
+                            </ul>
+                            <div style="margin-top:20px;padding-top:15px;border-top:1px dashed #c8e6c9;display:flex;justify-content:space-between;font-size:0.75rem;">
+                                <span>Bio-Health: <strong style="color:#2e7d32;">${d.biological_health}</strong></span>
+                                <span>Toxicity: <strong style="color:${d.toxicity_risk==='Low'?'#2e7d32':'#c62828'};">${d.toxicity_risk}</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background:#f9f9f9;padding:20px;border-radius:20px;border:1px solid #eee;border-left:5px solid #2e7d32;margin-bottom:20px;">
+                        <h4 style="margin:0 0 8px;color:#1b5e20;font-size:1rem;"><i class="fas fa-microscope"></i> Expert Diagnostic Analysis</h4>
+                        <p style="margin:0;color:#555;line-height:1.6;font-size:0.9rem;font-style:italic;">"${d.diagnosis}"</p>
+                    </div>
+                    
+                    <!-- SCIENTIFIC BASIS BOX -->
+                    <div style="background:#e3f2fd;padding:15px 20px;border-radius:15px;display:flex;gap:15px;align-items:center;border:1px solid #bbdefb;">
+                        <i class="fas fa-info-circle" style="color:#1565c0;font-size:1.5rem;"></i>
+                        <div style="font-size:0.75rem;color:#1565c0;line-height:1.4;">
+                            <strong>Basis of Diagnosis:</strong> This report is generated by cross-referencing your <strong>Soil Type (${data.soil_type})</strong>, <strong>pH Level (${data.ph})</strong>, and <strong>Detected Location (${data.location})</strong> with India's regional geological soil database and real-time climate telemetry.
+                        </div>
+                    </div>
+                `;
+                content.innerHTML = html;
+                showToast('🌡️', 'Soil Analysis Done', 'Your AI Soil Diagnosis report is ready.');
+            } catch(e) {
+                console.error(e);
+                alert('Lab Error: Could not perform AI diagnosis.');
+            } finally {
+                icon.className = "fas fa-microscope";
+                btn.style.opacity = "1";
+                btn.disabled = false;
+            }
+        }
+
+        // PEST ALERTS
+        var PESTS = [{
+            name: 'Aphids',
+            emoji: '🦟',
+            level: 'high',
+            crop: 'Wheat, Mustard',
+            desc: 'High infestation risk in northern regions. Warm temperatures and low wind speeds creating ideal breeding conditions.',
+            tip: 'Spray neem oil (5ml/L) or imidacloprid. Introduce ladybird beetles as biological control.'
+        }, {
+            name: 'Brown Plant Hopper',
+            emoji: '🪲',
+            level: 'high',
+            crop: 'Paddy / Rice',
+            desc: 'Alert for Maharashtra and West Bengal paddy fields. Monsoon humidity accelerating population growth.',
+            tip: 'Drain fields for 3-4 days. Apply buprofezin 25SC at 1ml/L water.'
+        }, {
+            name: 'Whitefly',
+            emoji: '🤍',
+            level: 'medium',
+            crop: 'Cotton, Tomato',
+            desc: 'Moderate presence in Gujarat and Rajasthan. Primarily a vector for leaf curl virus in cotton.',
+            tip: 'Use yellow sticky traps. Apply thiamethoxam 25WG at label dose.'
+        }, {
+            name: 'Leaf Blight',
+            emoji: '🍂',
+            level: 'medium',
+            crop: 'Maize, Sorghum',
+            desc: 'Fungal blight favored by recent high humidity. Early signs: water-soaked lesions on lower leaves.',
+            tip: 'Apply mancozeb 75WP fungicide. Ensure proper plant spacing for air circulation.'
+        }, {
+            name: 'Stem Borer',
+            emoji: '🐛',
+            level: 'medium',
+            crop: 'Sugarcane',
+            desc: 'Incidence in UP and Bihar districts. First-generation moths active during evening hours.',
+            tip: 'Release Trichogramma parasitoids (1 lakh/acre). Avoid ratooning in severely affected fields.'
+        }, {
+            name: 'Powdery Mildew',
+            emoji: '🌫️',
+            level: 'low',
+            crop: 'Grapes, Vegetables',
+            desc: 'Low risk but monitor vineyards and cucurbits. Cool nights with warm days are conducive.',
+            tip: 'Apply sulfur-based fungicide (3g/L) as preventive. Improve field ventilation.'
+        }];
+
+        function renderPests() {
+            document.getElementById('pestGrid').innerHTML = PESTS.map(function(p) {
+                return '<div class="pest-card ' + p.level + '" data-aos="fade-up">' +
+                    '<div class="pest-head"><span class="pest-emoji">' + p.emoji + '</span>' +
+                    '<div class="pest-name">' + p.name + '</div>' +
+                    '<span class="pest-badge">' + p.level.toUpperCase() + ' RISK</span></div>' +
+                    '<div class="pest-body"><span class="pest-crop-tag">🌾 ' + p.crop + '</span>' +
+                    '<p class="pest-desc">' + p.desc + '</p>' +
+                    '<div class="pest-tip"><strong>💡 Control:</strong> ' + p.tip + '</div>' +
+                    '</div></div>';
+            }).join('');
+        }
+
+        // CROP CALENDAR
+        var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var CAL = {
+            wheat: {
+                sow: [10, 11],
+                grow: [0, 1, 2],
+                harvest: [3, 4]
+            },
+            rice: {
+                sow: [5, 6],
+                grow: [7, 8],
+                harvest: [9, 10]
+            },
+            maize: {
+                sow: [5, 6],
+                grow: [7, 8],
+                harvest: [9, 10]
+            },
+            cotton: {
+                sow: [4, 5],
+                grow: [6, 7, 8],
+                harvest: [9, 10, 11]
+            },
+            sugarcane: {
+                sow: [1, 2],
+                grow: [3, 4, 5, 6, 7, 8],
+                harvest: [9, 10, 11]
+            },
+            soybean: {
+                sow: [5, 6],
+                grow: [7, 8],
+                harvest: [9, 10]
+            }
+        };
+
+        function renderCalendar(crop, btn) {
+            document.querySelectorAll('.cal-btn').forEach(function(b) {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            var d = CAL[crop] || {},
+                now = new Date().getMonth();
+            document.getElementById('calendarGrid').innerHTML = MONTHS.map(function(m, i) {
+                var bars = '';
+                if (d.sow && d.sow.indexOf(i) !== -1) bars += '<div class="cal-bar b-sow">Sow</div>';
+                if (d.grow && d.grow.indexOf(i) !== -1) bars += '<div class="cal-bar b-grow">Grow</div>';
+                if (d.harvest && d.harvest.indexOf(i) !== -1) bars += '<div class="cal-bar b-harvest">Harvest</div>';
+                return '<div class="cal-month' + (i === now ? ' cur' : '') + '">' +
+                    '<div class="cal-m-name">' + m + '</div>' +
+                    (bars || '<div style="font-size:0.65rem;color:#ccc;padding-top:8px;">—</div>') +
+                    (i === now ? '<div class="cal-now">▶ NOW</div>' : '') +
+                    '</div>';
+            }).join('');
+        }
+
+        // YIELD CALCULATOR
+        var BASE_YIELD = {
+            wheat: 25,
+            rice: 28,
+            maize: 30,
+            cotton: 12,
+            soybean: 15,
+            sugarcane: 350,
+            tomato: 120,
+            potato: 100
+        };
+
+        async function calcYield() {
+            var crop = document.getElementById('yieldCrop').value;
+            var area = parseFloat(document.getElementById('yieldArea').value) || 1;
+            var irr = document.getElementById('yieldIrr').selectedOptions[0].text;
+            var soil = document.getElementById('yieldSoil').selectedOptions[0].text;
+            var price = parseFloat(document.getElementById('yieldPrice').value) || 2000;
+            
+            showToast('🤖', 'AI Calculating...', 'Groq AI is analyzing your yield potential.');
+            
+            try {
+                const res = await fetch('/api/calculate-yield-ai', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({crop, area, irr, soil, price})
+                });
+                const aiData = await res.json();
+                
+                document.getElementById('yieldResult').style.display = 'block';
+                document.getElementById('yQtl').textContent = aiData.yield_qty.toLocaleString();
+                document.getElementById('yRev').textContent = '₹' + aiData.revenue.toLocaleString();
+                document.getElementById('yCostT').textContent = '₹' + aiData.cost.toLocaleString();
+                document.getElementById('yProfit').textContent = (aiData.profit >= 0 ? '+' : '') + '₹' + aiData.profit.toLocaleString();
+                document.getElementById('yProfit').style.color = aiData.profit >= 0 ? '#7fff00' : '#ff7070';
+
+                document.getElementById('yieldAiBox').style.display = 'block';
+                document.getElementById('yieldAiContent').innerHTML = `
+                    <div style="background:#fff;padding:15px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.05);grid-column:1/-1;">
+                        <strong style="color:#2e7d32;display:block;margin-bottom:8px;">📊 AI Financial Analysis</strong>
+                        <p style="font-size:0.9rem;color:#555;">${aiData.analysis}</p>
+                    </div>
+                    <div style="background:#fff;padding:15px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                        <strong style="color:#2e7d32;display:block;margin-bottom:5px;">🚀 Yield Boosters</strong>
+                        <ul style="font-size:0.85rem;padding-left:15px;">${(aiData.tips || aiData.yield_boosters || []).map(t => `<li>${t}</li>`).join('')}</ul>
+                    </div>
+                    <div style="background:#fff;padding:15px;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                        <strong style="color:#2e7d32;display:block;margin-bottom:5px;">💰 Cost Saving</strong>
+                        <ul style="font-size:0.85rem;padding-left:15px;">${(aiData.cost_tips || []).map(t => `<li>${t}</li>`).join('')}</ul>
+                    </div>
+                `;
+            } catch(e) {
+                alert('AI calculation failed, please check connection.');
+            }
+        }
+
+        async function refreshNews(btn) {
+            const icon = document.getElementById('newsRefreshIcon');
+            icon.classList.add('fa-spin');
+            btn.disabled = true;
+            showToast('🤖', 'AI News Refresh', 'Fetching real-time updates from Groq AI...');
+            await loadNews();
+            setTimeout(() => {
+                icon.classList.remove('fa-spin');
+                btn.disabled = false;
+            }, 1000);
+        }
+
+        async function loadNews() {
+            try {
+                const res = await fetch('/api/farmer-news');
+                const data = await res.json();
+                const grid = document.getElementById('newsGrid');
+                grid.innerHTML = (data.top_stories || []).map(s => `
+                    <div style="background:rgba(255,255,255,0.06);padding:25px;border-radius:20px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.05);border-top:5px solid ${s.impact==='Positive'?'#7fff00':'#ff9800'};" data-aos="fade-up">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                            <span style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:${s.impact==='Positive'?'#7fff00':'#ff9800'};font-weight:700;"><i class="fas fa-dot-circle"></i> ${s.impact} Alert</span>
+                            <span style="font-size:0.65rem;background:rgba(255,255,255,0.1);padding:3px 10px;border-radius:6px;color:rgba(255,255,255,0.7);">${s.category || 'General'}</span>
+                        </div>
+                        <h4 style="font-size:1.2rem;margin-bottom:15px;color:#fff;line-height:1.4;font-family:'Outfit';">${s.title}</h4>
+                        <p style="font-size:0.92rem;color:rgba(255,255,255,0.7);line-height:1.7;">${s.detail || 'Read more details about this update for better farm planning.'}</p>
+                    </div>
+                `).join('');
+                document.getElementById('newsTimer').innerHTML = `<i class="fas fa-history"></i> LAST SYNC: ${new Date().toLocaleTimeString()}`;
+                if(data.summary) {
+                    setTimeout(() => showToast('🤖', 'AI Daily Summary', data.summary), 3000);
+                }
+            } catch(e) {
+                document.getElementById('newsGrid').innerHTML = '<p style="text-align:center;grid-column:1/-1;">Check back later for fresh news.</p>';
+            }
+        }
+
+        let marketChartInstance = null;
+        async function loadMarketAnalysis(crop = 'all') {
+            try {
+                const res = await fetch(`/api/analyze-market?crop=${crop}`);
+                const data = await res.json();
+                
+                document.getElementById('marketAiText').innerHTML = `
+                    <div style="margin-bottom:15px;display:flex;gap:10px;">
+                        <span style="background:${data.grow_rec==='Yes'?'#e8f5e8':'#fff3e0'};color:${data.grow_rec==='Yes'?'#2e7d32':'#ef6c00'};padding:4px 12px;border-radius:50px;font-size:0.75rem;font-weight:700;">RECOMMENDED: ${data.grow_rec}</span>
+                        <span style="background:#e3f2fd;color:#1565c0;padding:4px 12px;border-radius:50px;font-size:0.75rem;font-weight:700;">INCOME: ${data.income}</span>
+                    </div>
+                    <p style="font-size:0.9rem;color:#555;line-height:1.6;margin-bottom:15px;"><strong>Summary:</strong> ${data.summary}</p>
+                    <div style="background:#f1f8e9;padding:12px;border-radius:10px;font-size:0.85rem;color:#1b5e20;"><strong>Expert Reasoning:</strong> ${data.reasoning}</div>
+                `;
+                renderMarketChart(data.trend, crop);
+            } catch(e) {}
+        }
+
+        function renderMarketChart(trendData, crop) {
+            const ctx = document.getElementById('marketChart').getContext('2d');
+            if(marketChartInstance) marketChartInstance.destroy();
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(46, 125, 50, 0.4)');
+            gradient.addColorStop(1, 'rgba(46, 125, 50, 0)');
+
+            marketChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: `${crop==='all'?'General Mandi':crop} Price`,
+                        data: trendData,
+                        borderColor: '#2e7d32',
+                        borderWidth: 4,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#1b5e20',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: gradient
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1b5e20',
+                            padding: 12,
+                            titleFont: { family: 'Poppins', size: 14 },
+                            bodyFont: { family: 'Poppins' },
+                            callbacks: {
+                                label: (i) => ` Price: ₹${i.parsed.y.toLocaleString()}/qtl`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            title: { display: true, text: 'Market Price (₹/Quintal)', color: '#1b5e20', font: { weight: 'bold' } },
+                            beginAtZero: false, 
+                            ticks: { callback: v => '₹' + v.toLocaleString() } 
+                        },
+                        x: { 
+                            title: { display: true, text: 'Month (Last 6 Months)', color: '#1b5e20', font: { weight: 'bold' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function loadWeatherAnalysis() {
+            var lat = currentLat || 28.6139;
+            var lon = currentLon || 77.2090;
+            try {
+                const res = await fetch(`/api/analyze-weather?lat=${lat}&lon=${lon}`);
+                const data = await res.json();
+                if(data && data.analysis) {
+                    document.getElementById('weatherAnalysis').style.display = 'flex';
+                    document.getElementById('weatherAiText').innerHTML = `
+                        <strong style="display:block;margin-bottom:6px;color:#7fff00;font-size:1.1rem;text-transform:uppercase;letter-spacing:1px;"><i class="fas fa-robot"></i> Groq AI Climate Insight</strong>
+                        <div style="font-size:0.95rem;opacity:0.95;line-height:1.6;margin-bottom:12px;">${data.analysis}</div>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            ${(data.tips || []).map(t => `<span style="background:rgba(255,255,255,0.15);padding:4px 12px;border-radius:50px;font-size:0.8rem;border:1px solid rgba(255,255,255,0.1);"><i class="fas fa-seedling"></i> ${t}</span>`).join('')}
+                        </div>
+                    `;
+                }
+            } catch(e) {}
+        }
+
+        let currentLat = null, currentLon = null;
+        // INIT
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(pos => {
+                currentLat = pos.coords.latitude;
+                currentLon = pos.coords.longitude;
+                loadWeather(currentLat, currentLon);
+                loadWeatherAnalysis();
+            }, () => {
+                loadWeather();
+                loadWeatherAnalysis();
+            });
+        } else {
+            loadWeather();
+            loadWeatherAnalysis();
+        }
+        
+        loadMarketPrices();
+        loadMarketAnalysis();
+        loadNews();
+        loadSchemes();
+        updateSoilDashboard();
+        renderPests();
+        renderCalendar('wheat', document.querySelector('.cal-btn'));
+
+        setTimeout(function() {
+            showToast('🌾', 'Welcome to Agrinova', 'Your AI farming assistant is ready!');
+        }, 2600);
+        setTimeout(function() {
+            showToast('⚠️', 'Pest Alert', 'High aphid risk detected in northern India.');
+        }, 5200);
+
+        setInterval(loadMarketPrices, 300000);
+    </script>
+</body>
+
+</html>

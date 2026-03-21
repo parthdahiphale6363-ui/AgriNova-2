@@ -1,0 +1,20 @@
+[phases.setup]
+nixPkgs = ["python311"]
+
+[phases.install]
+cmds = [
+  "pip install --upgrade pip",
+  "pip install -r requirements.txt"
+]
+
+[phases.build]
+cmds = []
+
+[start]
+cmd = "gunicorn backend.app:app"
+
+[environment]
+PYTHONUNBUFFERED = "1"
+
+[paths]
+ignore = ["venv", "venv-backup", "__pycache__", ".git"]
