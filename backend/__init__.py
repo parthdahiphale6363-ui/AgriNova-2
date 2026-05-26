@@ -17,12 +17,14 @@ def create_app():
     from backend.api.market_news import market_news_bp
     from backend.api.soil import soil_bp
     from backend.api.chatbot import chatbot_bp
+    from backend.api.tools import tools_bp
 
     app.register_blueprint(farming_bp, url_prefix='/api')
     app.register_blueprint(weather_bp, url_prefix='/api')
     app.register_blueprint(market_news_bp, url_prefix='/api')
     app.register_blueprint(soil_bp, url_prefix='/api')
     app.register_blueprint(chatbot_bp, url_prefix='/api')
+    app.register_blueprint(tools_bp, url_prefix='/api')
 
     @app.route('/')
     def index():

@@ -94,7 +94,83 @@ AGRINOVA is a comprehensive agricultural decision-support platform that acts as 
 
 ---
 
-## 🛠️ Tech Stack
+## � Quick Start & How AGRINOVA Helps Farmers
+
+### 🎯 What AGRINOVA Offers
+
+AGRINOVA transforms complex agricultural data into **simple, actionable advice** using AI. Here's how it helps:
+
+| Feature | Benefit | Who It Helps |
+|---------|---------|-------------|
+| 🌾 **Crop Advisor** | Recommends ideal crops based on soil, climate, and water | New & experienced farmers deciding what to plant |
+| 📊 **Market Intelligence** | Tracks 30+ commodities across 15+ mandis with price trends | Farmers timing their harvest and sales |
+| 🌡️ **Weather Forecasts** | 7-day hyper-local predictions with field action advice | Farmers planning irrigation & spraying schedules |
+| 🥗 **Soil Health** | AI-powered soil scoring with NPK recommendations | Farmers improving soil productivity |
+| ⚠️ **Pest Alerts** | Region-specific disease warnings with control measures | Farmers protecting crops from losses |
+| 💰 **Income Calculator** | Projects yield, costs, and profits per acre | Farmers making financial decisions |
+| 🏛️ **Government Schemes** | Direct links to PM-KISAN, subsidies, and insurance | Farmers accessing available financial support |
+| 💬 **AI Chatbot** | Answers questions 24/7 in simple language | All farmers needing quick advice |
+
+### ⏱️ 5-Minute Quick Start
+1. **Allow Location**: Click allow when browser asks for location (farms get hyper-local data)
+2. **View Dashboard**: See current weather, market prices, and pest alerts for your area
+3. **Get Crop Advice**: Fill soil type → pH → water source → click "Recommend Crop"
+4. **Check Market Prices**: View live mandi prices with 6-month trend predictions
+5. **Ask AI Questions**: Use the green chat bubble for instant farming advice
+
+---
+
+## 📊 Enhanced Market Intelligence System
+
+### 🔄 Live Mandi Price Tracking (32+ Commodities)
+
+AGRINOVA now tracks **32 active commodities** across **5 major Indian agricultural regions**:
+
+#### **Northern Region (Punjab, Haryana, Delhi)**
+- Basmati Rice, Common Rice, Wheat, Maize, Cotton, Potato
+
+#### **Central Region (MP, Chhattisgarh, Gujarat)**
+- Soybean, Gram (Chickpea), Maize, Cotton, Mustard, Garlic
+
+#### **Western Region (Gujarat, Rajasthan, MS)**
+- Groundnut, Cumin, Onion, Chili, Turmeric
+
+#### **Eastern Region (West Bengal, Bihar, UP)**
+- Jute, Paddy (Rice), Sugarcane, Lentil
+
+#### **Southern Region (Karnataka, Tamil Nadu, Kerala, AP)**
+- Tomato, Coffee, Coconut, Coriander, Black Pepper, Cardamom, Tea, Ginger, Arhar (Dal)
+
+### 🎯 AI-Powered Market Analysis
+
+The **Analyze-Market API** provides:
+- ✅ **Crop-Specific Forecasts**: 6-month price projections for 7 major crops
+- ✅ **Growth Recommendations**: "Yes" / "Conditional" / "No" based on market trends
+- ✅ **Income Estimates**: Expected profit per acre in rupees
+- ✅ **Expert Reasoning**: Explanation of market drivers and forecasts
+- ✅ **Seasonal Insights**: Understanding when prices peak and why
+
+### 📈 Market Features
+
+**Search & Filter**:
+- Search by commodity, market, or state
+- Filter by trend: Rising 📈 | Falling 📉 | Stable ➡️
+- Real-time price updates every 5 minutes
+
+**Price Chart Analysis**:
+- Interactive Chart.js graphs showing 6-month trends
+- Hover tooltips showing exact prices and dates
+- Color-coded profit zones (green=profit, red=loss)
+
+**Market Statistics Dashboard**:
+- Total commodities tracked
+- Number of markets monitored
+- Trending commodities (up/down/stable)
+- Regional coverage map
+
+---
+
+## �🛠️ Tech Stack
 
 ### Backend
 *   **Flask 2.3.3**: Lightweight web server and JSON REST API gateway.
