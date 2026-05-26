@@ -1,0 +1,76 @@
+{
+  "name": "AGRINOVA - AI-Powered Farming Assistant",
+  "short_name": "AGRINOVA",
+  "description": "Smart AI-powered farming assistant with real-time weather, market prices, and government schemes",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#2e7d32",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%232e7d32' width='192' height='192'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='120' fill='white' font-weight='bold' font-family='Poppins'>🌾</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%232e7d32' width='512' height='512'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='300' fill='white' font-weight='bold' font-family='Poppins'>🌾</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%23e9f2e9' width='540' height='720'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='80' fill='%232e7d32'>AGRINOVA</text></svg>",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Crop Recommendation",
+      "short_name": "Crops",
+      "description": "Get AI-powered crop recommendations",
+      "url": "/#recommendations",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%232e7d32' width='96' height='96'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='60' fill='white'>🌾</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Market Prices",
+      "short_name": "Prices",
+      "description": "Check real-time Mandi prices",
+      "url": "/#market",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%234caf50' width='96' height='96'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='60' fill='white'>💰</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Weather",
+      "short_name": "Weather",
+      "description": "Live weather and forecasts",
+      "url": "/#weather",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%2387ceeb' width='96' height='96'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='60' fill='white'>🌤️</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "categories": ["agriculture", "productivity"],
+  "prefer_related_applications": false
+}
