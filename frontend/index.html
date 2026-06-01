@@ -2423,7 +2423,7 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label"><i class="fas fa-flask" style="color:#2e7d32;"></i> Soil pH</label>
-                            <input type="number" class="form-input" id="ph" value="6.5" step="0.1" required>
+                            <input type="number" class="form-input" id="ph" value="6.5" min="3.5" max="9.5" step="0.1" required>
                         </div>
                     </div>
 
@@ -3119,9 +3119,15 @@
             document.getElementById('cropResults').style.display = 'none';
 
             try {
+                var phValue = parseFloat(document.getElementById('ph').value);
+                if (isNaN(phValue) || phValue < 3.5 || phValue > 9.5) {
+                    alert('Please enter a valid soil pH between 3.5 and 9.5.');
+                    document.getElementById('loading').style.display = 'none';
+                    return;
+                }
                 var data = {
                     soil_type: document.getElementById('soilType').value,
-                    ph: parseFloat(document.getElementById('ph').value),
+                    ph: phValue,
                     water_source: document.getElementById('waterSource').value,
                     sowing_month: document.getElementById('sowingMonth').value,
                     field_notes: document.getElementById('fieldNotes') ? document.getElementById('fieldNotes').value : '',
@@ -3826,9 +3832,10 @@
         async function calcYield() {
             var crop = document.getElementById('yieldCrop').value;
             var area = parseFloat(document.getElementById('yieldArea').value) || 1;
-            var irr = document.getElementById('yieldIrr').selectedOptions[0].text;
-            var soil = document.getElementById('yieldSoil').selectedOptions[0].text;
+            var irr = parseFloat(document.getElementById('yieldIrr').value) || 1.0;
+            var soil = parseFloat(document.getElementById('yieldSoil').value) || 1.0;
             var price = parseFloat(document.getElementById('yieldPrice').value) || 2000;
+            var cost = parseFloat(document.getElementById('yieldCost').value) || 8000;
             
             showToast('🤖', 'AI Calculating...', 'Groq AI is analyzing your yield potential.');
             
@@ -3836,7 +3843,7 @@
                 const res = await fetch('/api/calculate-yield-ai', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({crop, area, irr, soil, price})
+                    body: JSON.stringify({crop, area, irr, soil, price, cost})
                 });
                 const aiData = await res.json();
                 
