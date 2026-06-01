@@ -2422,8 +2422,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label"><i class="fas fa-flask" style="color:#2e7d32;"></i> Soil pH</label>
-                            <input type="number" class="form-input" id="ph" value="6.5" min="3.5" max="9.5" step="0.1" required>
+                            <label class="form-label"><i class="fas fa-flask" style="color:#2e7d32;"></i> Soil pH (1-7)</label>
+                            <input type="number" class="form-input" id="ph" value="6.5" min="1" max="7" step="0.1" required>
                         </div>
                     </div>
 
@@ -3120,8 +3120,8 @@
 
             try {
                 var phValue = parseFloat(document.getElementById('ph').value);
-                if (isNaN(phValue) || phValue < 3.5 || phValue > 9.5) {
-                    alert('Please enter a valid soil pH between 3.5 and 9.5.');
+                if (isNaN(phValue) || phValue < 1 || phValue > 7) {
+                    alert('Please enter a valid soil pH between 1 and 7.');
                     document.getElementById('loading').style.display = 'none';
                     return;
                 }
@@ -3197,10 +3197,10 @@
                     </div>
 
                     ${(primary.issues_detected && primary.issues_detected.length > 0) ? `
-                        <div style="background:#fff5f5;border-left:5px solid #c62828;padding:15px 20px;border-radius:10px;margin-bottom:30px;">
-                            <h4 style="color:#c62828;font-size:0.9rem;margin-bottom:5px;"><i class="fas fa-exclamation-circle"></i> Mismatches Detected:</h4>
-                            <ul style="margin:0;padding-left:20px;color:#b71c1c;font-size:0.85rem;">
-                                ${primary.issues_detected.map(issue => `<li>${issue}</li>`).join('')}
+                        <div style="background:#ffcdd2;border-left:6px solid #c62828;padding:18px 20px;border-radius:10px;margin-bottom:30px;box-shadow:0 2px 8px rgba(198, 40, 40, 0.15);">
+                            <h4 style="color:#b71c1c;font-size:0.95rem;margin-bottom:8px;font-weight:700;"><i class="fas fa-exclamation-circle"></i> Mismatches Detected:</h4>
+                            <ul style="margin:0;padding-left:20px;color:#660000;font-size:0.9rem;line-height:1.6;">
+                                ${primary.issues_detected.map(issue => `<li style="margin-bottom:4px;">${issue}</li>`).join('')}
                             </ul>
                         </div>
                     ` : ''}

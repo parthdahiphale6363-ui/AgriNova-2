@@ -117,9 +117,9 @@ def recommend_crop():
     try:
         ph_value = float(data.get('ph', 0))
     except Exception:
-        return jsonify({"success": False, "error": "Please enter a valid soil pH value between 3.5 and 9.5."}), 400
-    if ph_value < 3.5 or ph_value > 9.5:
-        return jsonify({"success": False, "error": "Please enter a valid soil pH value between 3.5 and 9.5."}), 400
+        return jsonify({"success": False, "error": "Please enter a valid soil pH value between 1 and 7."}), 400
+    if ph_value < 1 or ph_value > 7:
+        return jsonify({"success": False, "error": "Please enter a valid soil pH value between 1 and 7."}), 400
     data['ph'] = ph_value
     prompt = f"""You are an elite agricultural decision support system. 
     REALISM is your priority. If factors mismatch, you must be honest.
